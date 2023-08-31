@@ -1,14 +1,15 @@
-const express = require('express');
+const express = require('express')
 const app = express()
-const dotenv = require('dotenv');
-dotenv.config()
-const route = require('./routes/index')
-const PORT = process.env.PORT;
-const messages = require('./messages')
+const router = require('./routes/message')
+const mongoose = require('mongoose')
+const dotenv = require('dotenv')
+dotenv.config();
+app.use(express.json())
+app.use('/api/message', router);
 
-app.use('/', route);
 
-
-app.listen(PORT, () => {
-    console.log(`application is running at https://localhost:${PORT}`);
-});
+mongoose.connect(process.env.CONNECT).then(() => {
+    app.listen(process.env.PORT, () => {
+        console.log(`connected to http://localhost:${process.env.PORT}`)
+    })
+}).catch((err) => console.log(err.message))
